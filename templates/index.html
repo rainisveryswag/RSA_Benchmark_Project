@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSA Benchmark Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        h1, h2, h3, h4 {
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #333;
+        }
+            table th, table td {
+            border: 1px solid #444;
+            padding: 10px;
+            text-align: center;
+        }
+        table th {
+            background-color: #444;
+            font-weight: bold;
+        }
+        table td {
+            background-color: #555;
+        }
+        table th:first-child, table td:first-child {
+            text-align: left; /* Align metric names to the left */
+        }
+    </style>
+        
+</head>
+<body>
+    <header>
+        <h1>RSA Benchmark Results</h1>
+    </header>
+
+    <div class="container">
+        {% if results %}
+        <h2>Benchmark Results</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>1024-bit Key</th>
+                    <th>2048-bit Key</th>
+                    <th>4096-bit Key</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Average Encryption Time</td>
+                    <td>
+                        {% if results[0].avg_enc_time < 1 %}
+                            {{ "%.2f" | format(results[0].avg_enc_time * 1000) }} µs
+                        {% else %}
+                            {{ "%.2f" | format(results[0].avg_enc_time) }} ms
+                        {% endif %}
+                    </td>
+ 
+                    <td>
+                        {% if results[1].avg_enc_time < 0.001 %}
+                            {{ "%.2f" | format(results[1].avg_enc_time * 1000) }} µs
+                        {% else %}
+                            {{ "%.2f" | format(results[1].avg_enc_time) }} ms
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if results[2].avg_enc_time < 0.001 %}
+                            {{ "%.2f" | format(results[2].avg_enc_time * 1000) }} µs
+                        {% else %}
+                            {{ "%.2f" | format(results[2].avg_enc_time) }} ms
+                        {% endif %}
+                    </td>
+                </tr>                
+                <tr>
+                    <td>Average Decryption Time</td>
+                    <td>{{ "%.2f" | format(results[0].avg_dec_time * 1000) }} µs</td>
+                    <td>{{ "%.2f" | format(results[1].avg_dec_time * 1000) }} µs</td>
+                    <td>{{ "%.2f" | format(results[2].avg_dec_time * 1000) }} µs</td>
+                </tr>                
+                <tr>
+                    <td>Encryption Throughput</td>
+                    <td>{{ "%.2f" | format(results[0].enc_throughput) }} MB/s</td>
+                    <td>{{ "%.2f" | format(results[1].enc_throughput) }} MB/s</td>
+                    <td>{{ "%.2f" | format(results[2].enc_throughput) }} MB/s</td>
+                </tr>
+                <tr>
+                    <td>Decryption Throughput</td>
+                    <td>{{ "%.2f" | format(results[0].dec_throughput) }} MB/s</td>
+                    <td>{{ "%.2f" | format(results[1].dec_throughput) }} MB/s</td>
+                    <td>{{ "%.2f" | format(results[2].dec_throughput) }} MB/s</td>
+                </tr>
+                <tr>
+                    <td>Memory Usage (Enc/Dec)</td>
+                    <td>{{ "%.1f" | format(results[0].avg_enc_memory) }} MB</td>
+                    <td>{{ "%.1f" | format(results[1].avg_enc_memory) }} MB</td>
+                    <td>{{ "%.1f" | format(results[2].avg_enc_memory) }} MB</td>
+                </tr>
+            </tbody>
+        </table>
+               
+        <h2>Benchmark Graph</h2>
+        <p>Graph based on input size: <strong>{{ input_size }} bytes</strong></p>
+        <img src="{{ url_for('static', filename=graph_filename) }}" alt="RSA Benchmark Graph" style="max-width: 100%; height: auto; display: block; margin: 20px auto;">
+
+
+        <div class="content">
+            <!-- RSA Analysis Text -->
+            <div class="content">
+                <!-- RSA Analysis Text -->
+                <h3>Detailed RSA Security Analysis Report</h3>
+            
+                <h4>2. Security Implications</h4>
+            
+                <h5>(i) Encryption Time:</h5>
+                <p><strong>Why It Matters:</strong> Encryption time impacts the speed at which data can be secured. Systems handling large volumes of data must strike a balance between encryption speed and security strength.</p>
+                <p><strong>Analysis Across Key Sizes:</strong></p>
+                <ul>
+                    <li><strong>1024-bit:</strong> Fastest encryption time but vulnerable to modern attacks like factorization.</li>
+                    <li><strong>2048-bit:</strong> Moderate encryption time, offering robust security against brute force.</li>
+                    <li><strong>4096-bit:</strong> Slow encryption time but provides excellent protection against attacks.</li>
+                </ul>
+            
+                <h5>(ii) Decryption Time:</h5>
+                <p><strong>Why It Matters:</strong> Decryption time affects how quickly secured data can be accessed.</p>
+                <p><strong>Analysis Across Key Sizes:</strong></p>
+                <ul>
+                    <li><strong>1024-bit:</strong> Fastest decryption time but insufficient security for sensitive data.</li>
+                    <li><strong>2048-bit:</strong> Balanced decryption time, sufficient for most secure applications.</li>
+                    <li><strong>4096-bit:</strong> Slower decryption time but tolerable for high-security applications.</li>
+                </ul>
+            
+                <h5>(iii) Throughput:</h5>
+                <p><strong>Why It Matters:</strong> Throughput reflects how much data can be encrypted or decrypted in a given time. High throughput is essential for systems processing large amounts of data, such as web servers or IoT devices.</p>
+                <p><strong>Analysis Across Key Sizes:</strong></p>
+                <ul>
+                    <li><strong>1024-bit:</strong> Highest throughput, but its insecurity makes it suitable only for scenarios where performance outweighs security.</li>
+                    <li><strong>2048-bit:</strong> Moderate throughput suitable for applications with medium data volumes and strong security requirements.</li>
+                    <li><strong>4096-bit:</strong> Lowest throughput, limiting its use to low-frequency or high-value transactions.</li>
+                </ul>
+            
+                <h5>(iv) Memory Usage:</h5>
+                <p><strong>Why It Matters:</strong> High memory usage can strain system resources, especially in resource-constrained environments like embedded systems or IoT devices.</p>
+                <p><strong>Analysis Across Key Sizes:</strong></p>
+                <ul>
+                    <li><strong>1024-bit:</strong> Low memory usage, making it resource-efficient but insecure.</li>
+                    <li><strong>2048-bit:</strong> Moderate memory usage, offering a good trade-off between resource use and security.</li>
+                    <li><strong>4096-bit:</strong> Highest memory usage, requiring systems with sufficient resources to handle this overhead.</li>
+                </ul>
+            
+                <h4>3. Recommendations</h4>
+                <h5>(i) 1024-bit Keys:</h5>
+                <p><strong>When to Use:</strong> Only for non-sensitive applications or legacy systems where upgrading is infeasible.</p>
+                <p><strong>Risks:</strong> Highly vulnerable to factorization attacks and brute force. Unsuitable for modern cryptographic needs.</p>
+            
+                <h5>(ii) 2048-bit Keys:</h5>
+                <p><strong>When to Use:</strong> Recommended for most modern applications, such as secure communications, web servers, and enterprise systems.</p>
+                <p><strong>Advantages:</strong> Strong resistance to attacks while maintaining acceptable performance. Balanced memory usage makes it suitable for a wide range of devices.</p>
+                <p><strong>Risks:</strong> None significant, but consider upgrading to 4096-bit for ultra-sensitive data.</p>
+            
+                <h5>(iii) 4096-bit Keys:</h5>
+                <p><strong>When to Use:</strong> Ideal for high-security applications, such as financial systems, government operations, and sensitive communications.</p>
+                <p><strong>Advantages:</strong> Near-immunity to known attacks, including brute force and factorization.</p>
+                <p><strong>Risks:</strong> Slower encryption/decryption and lower throughput may not suit high-volume data systems. Requires significant memory and processing power.</p>
+            
+                <h4>4. Graphical Analysis</h4>
+                <ul>
+                    <li><strong>Graph 1: Encryption and Decryption Times:</strong> Visualizes how times increase with key size. Example: A bar chart comparing encryption and decryption times for each key size.</li>
+                    <li><strong>Graph 2: Throughput:</strong> Highlights the drop in throughput with larger key sizes. Example: A line graph showing the downward trend as key size increases.</li>
+                    <li><strong>Graph 3: Memory Usage:</strong> Shows memory usage differences for encryption/decryption operations. Example: A stacked bar chart for each key size's memory footprint.</li>
+                </ul>
+            
+                <h4>5. Decision-Making Guide</h4>
+                <p><strong>Use this guide to select the appropriate key size based on system requirements:</strong></p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Scenario</th>
+                            <th>Recommended Key Size</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>High performance, low security needs</td>
+                            <td>1024-bit</td>
+                        </tr>
+                        <tr>
+                            <td>General-purpose secure applications</td>
+                            <td>2048-bit</td>
+                        </tr>
+                        <tr>
+                            <td>Ultra-sensitive data, high security</td>
+                            <td>4096-bit</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+
+        {% else %}
+        <!-- First Page with Form -->
+        <h3>Submit Data for Benchmarking</h3>
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="input_data">Input Data (String):</label>
+                <input type="text" id="input_data" name="input_data" placeholder="Enter text data (optional)">
+            </div>
+            <div class="form-group">
+                <label for="file_input">Upload a File:</label>
+                <input type="file" id="file_input" name="file_input">
+            </div>
+            <div class="form-group">
+                <label for="iterations">Number of Iterations:</label>
+                <input type="number" id="iterations" name="iterations" min="1" value="1" required>
+            </div>
+            <button type="submit">Run Benchmark</button>
+        </form>
+        {% endif %}
+    </div>
+</body>
+</html>
